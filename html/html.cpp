@@ -20,14 +20,8 @@ if(!htmlFile){
 }
 char *buf = new char[size];
 int p = 0;
-while(!htmlFile.eof()){
-	if(p < size){
-		htmlFile.get(buf[p]);
-		p++;
-	}else{
-		break;
-	}
-}
+for(p = 0;!htmlFile.eof(); p++) htmlFile.get(buf[p]);
+buf[p] = 0;
 htmlFile.close();
 char Siz[6];
 sprintf(Siz, "%d", (p-1));

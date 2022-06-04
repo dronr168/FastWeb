@@ -157,6 +157,9 @@ int NetHTTP::ClientSend(){
                 p++;
 
 	}
-	size_fakt = p;
+	if(p < size)
+		size_fakt = p;
+	else
+		size_fakt = size;
 	return 0;
 }
