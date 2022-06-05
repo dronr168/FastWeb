@@ -1,0 +1,1 @@
+int checksize(char *name);

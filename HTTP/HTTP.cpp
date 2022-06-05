@@ -1,18 +1,21 @@
 #include <iostream>
+#include <fstream>
 #include "../html/html.h"
 #include "../robots/spisok.h"
+#include "check.h"
 
-#define size 104857700 //максимальный размер предаваемого файла 100 MB
+using namespace std;
 
 class NetHTTP : public robots{
+	int size = 0;
 	char *i_buf;
 	char path[31];
 	char type[5];
 public:
 	int sock;
 	int size_fakt;
-        char *body = new char[size-100];
-        char *o_buf = new char[size];
+        char *body = new char[2048-100];
+        char *o_buf;
 	NetHTTP(char *opop, int faktS);
 	~NetHTTP();
 	int ClientSend();
@@ -112,9 +115,20 @@ int NetHTTP::ClientSend(){
 	if(coitPass >= 1) resultPass = 1;
 	//start building a response
 	if(path[0]=='/' && (!path[1])){
-		p = BodyHtml("index.html", o_buf, "text/html");
+		size = checksize("index.html");
+		if(size!=0){
+			o_buf = new char[size+100];
+			p = BodyHtml("index.html", o_buf, "text/html");
+			size+=100;
+		}else{
+			p = 0;
+		}
 		if(p==0){
 			char err[] = "HTTP/1.1 404 Not Found\r\n\r\n<html>404</html>\r\n";
+			for(p = 0; err[p]; p++);
+			o_buf = new char[p];
+			size = p;
+			p = 0;
 			while(err[p]){
 				o_buf[p] = err[p];
 				p++;
@@ -123,9 +137,20 @@ int NetHTTP::ClientSend(){
 			p++;
 		}
 	}else if(path[p-3]=='i' && path[p-2]=='c' && path[p-1]=='o'){
-                p = BodyHtml((path+1), o_buf, "image/x-icon");
+		size = checksize((path+1));
+		if(size!=0){
+			o_buf = new char[size+100];
+                	p = BodyHtml((path+1), o_buf, "image/x-icon");
+			size+=100;
+		}else{
+			p = 0;
+		}
                 if(p==0){
                         char err[] = "HTTP/1.1 404 Not Found\r\n\r\n<html>404</html>\r\n";
+                        for(p = 0; err[p]; p++);
+                        o_buf = new char[p];
+			size = p;
+                        p = 0;
                         while(err[p]){
                                 o_buf[p] = err[p];
                                 p++;
@@ -134,9 +159,20 @@ int NetHTTP::ClientSend(){
                         p++;
                 }
 	}else if(resultPass){
-                p = BodyHtml((path+1), o_buf, TypeS);
+                size = checksize((path+1));
+                if(size!=0){
+                        o_buf = new char[size+100];
+                	p = BodyHtml((path+1), o_buf, TypeS);
+			size+=100;
+                }else{
+                        p = 0;
+                }
 		if(p==0){
                         char err[] = "HTTP/1.1 404 Not Found\r\n\r\n<html>404</html>\r\n";
+                        for(p = 0; err[p]; p++);
+                        o_buf = new char[p];
+			size = p;
+                        p = 0;
 			while(err[p]){
                                 o_buf[p] = err[p];
                                 p++;
@@ -147,8 +183,11 @@ int NetHTTP::ClientSend(){
 /*somewhere here you can add support
 					for your modules ..*/
 	}else{
-		p = 0;
                 char err[] = "HTTP/1.1 404 Not Found\r\n\r\n<html>404</html>\r\n";
+                for(p = 0; err[p]; p++); 
+                o_buf = new char[p];
+		size = p;
+                p = 0;
                 while(err[p]){
 			o_buf[p] = err[p];
 			p++;
