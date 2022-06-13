@@ -1,25 +1,26 @@
-fastWeb is a compact C++ web engine.
+fastWeb - это компактный веб движок на c++
 
-Most of the settings are made in the source code.
+Для полной настройки используйте исходный код. 
+Для компиляции проекта перейдите в главную директорию и выполните: make
+Исли вы хотите установить программу после компиляции выполните: make install
+Однако помните: Для коректно работы в директории как минимум должны быть файлы:
+		index.html
+		robots.txt(список разрешонных файлов, а не запрещённых, как обычно, пример в /build/bin)
+	для работы по https протоколу понадабятся файлы:
+		cert.pem
+		key.pem
+запуск производиться командой: fastWeb <PORT> <nossl/ssl>
+пример: fastWeb 80 nossl (помните для использования 80 и 443 порта требуются повышенные права)
 
-In order to compile the project, run make in the main directory.
-The binary file, along with sample files needed to run the server, will be located in build/bin. You can transfer this file to a directory convenient for you, but remember, you need at least - index.html and robots.txt. 
-Also, if you want to use https, you will have to get the certificate and private key, and place it in the folder with the binary file.
+также вы можете использовать в запуске конфигурационный файл: fastWeb -c <CONFIG_FILE>
+пример fastWeb -c config
+		где config:
+			{80}
+			{nossl}
+			{js,application/x-javascript;gif,image/gif;png,image/png;jpg,image/jpg;css,text/css;mp3,mpeg/mp3;wav,audio/wav;mp4,video/mp4;avi,video/avi}
+	в общем виде CONFIG_FILE:
+			{<PORT>}
+			{<nossl/ssl>}
+			{<TYPE_FILE1>,<HEAD_TYPE1>;<TYPE_FILE2>,<HEAD_TYPE2>.......}
 
-launch examples:
-	./fastWeb 80 nossl 
-		for start HTTP
-
-	./fastWeb 442 ssl
-		for start HTTPS
-
-in case your site uses long paths, you will have to edit the file robots/spisok.cpp and robots/spisok.h
-
-if you want to add support for new file formats, you should edit the lists in the file HTTP/HTTP.cpp
-also the processing of request forms, and adding your modules should be done in this file.
-
-example file robots.txt:
-	build/bin/robots.txt
-
-
-This version does not support logs and daemon...
+по умолчанию не ведутся логи, и не запускаются демоны

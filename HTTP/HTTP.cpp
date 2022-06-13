@@ -34,7 +34,7 @@ NetHTTP::~NetHTTP(){
 }
 
 int NetHTTP::ClientSend(){
-	char ***types;//initializing an array containing types
+	char ***types;//инацилизируем типы файлов и их заголовки
         if(checkconfig){
                 types = typeX;
         }else{
@@ -92,7 +92,7 @@ int NetHTTP::ClientSend(){
 			}
 		}
 		while(i_buf[i]){
-			body[sizeB] = i_buf[i];//getting the POST body if present
+			body[sizeB] = i_buf[i];//чтение post запроса, если он есть
 			i++;
 			p++;
 		}
@@ -104,7 +104,7 @@ int NetHTTP::ClientSend(){
 		sizeT = sizetype;
 	else
 		sizeT = 32;
-	//looking for matching data types
+	//проверяем тип файла
 	int CheT=-1;
 	for(int i=0; i<sizeT; i++){
 		int sT;
@@ -116,12 +116,12 @@ int NetHTTP::ClientSend(){
 		}
 		if(!ErT) CheT=i;
 	}
-	char TypeS[32]; //type string size
+	char TypeS[64]; //размер строки типов
 	if(CheT != -1){
 		for(int i=0; types[CheT][1][i]; i++) TypeS[i] = types[CheT][1][i];
 	}
 
-	//checking file extension request
+	//ищем запрошенный файл в robots.txt
 	bool resultPass = 0;
 	int coitPass = 0;
 	for(int i=0; i<coit; i++){
@@ -132,7 +132,7 @@ int NetHTTP::ClientSend(){
 		if(err==0) coitPass++;
 	}
 	if(coitPass >= 1) resultPass = 1;
-	//start building a response
+	//начинаем формировать ответ
 	if(path[0]=='/' && (!path[1])){
 		size = checksize("index.html");
 		if(size!=0){
@@ -199,8 +199,7 @@ int NetHTTP::ClientSend(){
                         o_buf[p] = '\0';
 			p++;
                 }
-/*somewhere here you can add support
-					for your modules ..*/
+/*место для будущих модулей ..*/
 	}else{
                 char err[] = "HTTP/1.1 404 Not Found\r\n\r\n<html>404</html>\r\n";
                 for(p = 0; err[p]; p++); 

@@ -26,7 +26,7 @@ SSL_CTX* create_context()
 
 void configure_server_context(SSL_CTX *ctx)
 {
-    /* Set the key and cert */
+    /*установка ключа и сертификата*/
     if (SSL_CTX_use_certificate_chain_file(ctx, "cert.pem") <= 0) {
         ERR_print_errors_fp(stderr);
         exit(EXIT_FAILURE);
@@ -67,8 +67,8 @@ void openssl(int sock, int size){
 		i_buf[size_fakt] = '\0';
         	NetHTTP client(i_buf, size_fakt), *q;
         	q = &client;
-        	q->grap();//reading required files
-        	q->ClientSend();//response formation
+        	q->grap();//читаем файл
+        	q->ClientSend();//отправляем ответ
 		if (SSL_write(ssl, q->o_buf, q->size_fakt) <= 0) {
 			ERR_print_errors_fp(stderr);
 			if (ssl != NULL) {
