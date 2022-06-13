@@ -6,10 +6,7 @@
 #include <unistd.h>
 #include "HTTP/HTTP.h"
 
-#define size 104857700 //maximum transfer file size 100 MB
-
-
-void noTLS(int sock){
+void noTLS(int sock, int size){
         char *i_buf = new char[size];
         int size_fakt = recv(sock, i_buf, size, 0);
         i_buf[size_fakt] = '\0';

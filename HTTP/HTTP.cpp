@@ -3,6 +3,8 @@
 #include "../html/html.h"
 #include "../robots/spisok.h"
 #include "check.h"
+#include "strcp.h"
+#include "../main.h"
 
 using namespace std;
 
@@ -32,19 +34,35 @@ NetHTTP::~NetHTTP(){
 }
 
 int NetHTTP::ClientSend(){
-	//initializing an array containing types
-	char types[32][2][32] = {
-		{"js", "application/x-javascript"},
-		{"gif", "image/gif"},
-		{"png", "image/png"},
-		{"jpg", "image/jpg"},
-		{"css", "text/css"},
-		{"mp3", "mpeg/mp3"},
-		{"wav", "audio/wav"},
-		{"mp4", "mpeg/mp4"},
-		{"avi", "video/avi"}
-	};
-
+	char ***types;//initializing an array containing types
+        if(checkconfig){
+                types = typeX;
+        }else{
+                types = new char**[32]; 
+                for(int w=0; w<32; w++){ 
+                        types[w] = new char*[2];
+                        for(int h=0;h<2;h++)
+                                types[w][h] = new char[64];
+                }
+                strcp(types[0][0], "js", 2);
+                strcp(types[0][1], "application/x-javascript", 24);
+                strcp(types[1][0], "gif", 3);
+                strcp(types[1][1], "image/gif", 9);
+                strcp(types[2][0], "png", 3);
+                strcp(types[2][1], "image/png", 9);
+                strcp(types[3][0], "jpg", 3);
+                strcp(types[3][1], "image/jpg", 9);
+                strcp(types[4][0], "css", 3);
+                strcp(types[4][1], "text/css", 8);
+                strcp(types[5][0], "mp3", 3);
+                strcp(types[5][1], "mpeg/mp3", 8);
+                strcp(types[6][0],  "wav", 3);
+                strcp(types[6][1], "audio/wav", 9);
+                strcp(types[7][0], "mp4", 3);
+                strcp(types[7][1], "video/mp4", 9);
+                strcp(types[8][0], "avi", 3);
+                strcp(types[8][1], "video/avi", 9);
+        }
 	int i = 0;
 	int p = 0;
 	while(i_buf[i] != ' '){
@@ -82,9 +100,10 @@ int NetHTTP::ClientSend(){
 	}
 
 	int sizeT;
-	for(sizeT=0; types[sizeT][0][0]; sizeT++);  //calculate the size of the list of types
-	sizeT++;
-	
+	if(checkconfig)
+		sizeT = sizetype;
+	else
+		sizeT = 32;
 	//looking for matching data types
 	int CheT=-1;
 	for(int i=0; i<sizeT; i++){
@@ -200,5 +219,13 @@ int NetHTTP::ClientSend(){
 		size_fakt = p;
 	else
 		size_fakt = size;
+	if(!checkconfig){
+                for(int i=0;i<32;i++){
+                        for(int y=0;y<2;y++)
+                                delete[] types[i][y];
+                        delete[] types[i];
+                }
+                delete[] types;
+        }
 	return 0;
 }

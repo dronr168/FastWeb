@@ -1,1 +1,1 @@
-void noTLS(int sock);
+void noTLS(int sock, int size);

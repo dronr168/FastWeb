@@ -8,8 +8,6 @@
 #include "../HTTP/HTTP.h"
 #include <iostream>
 
-#define size 104857700 //maximum transfer file size 100 MB
-
 SSL_CTX* create_context()
 {
     const SSL_METHOD *method;
@@ -39,7 +37,7 @@ void configure_server_context(SSL_CTX *ctx)
     }
 }
 
-void openssl(int sock){
+void openssl(int sock, int size){
 	SSL_CTX *ssl_ctx = NULL;
 	SSL *ssl = NULL;
 	ssl_ctx = create_context();

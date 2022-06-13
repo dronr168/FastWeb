@@ -1,13 +1,19 @@
 all: fastWeb
 
-fastWeb: build/main.o build/HTTP.o build/spisok.o build/html.o build/noTLS.o build/openssl.o
-	g++ -g -pthread build/main.o build/HTTP.o build/spisok.o build/html.o build/noTLS.o build/openssl.o -o build/bin/fastWeb -lssl -lcrypto
+fastWeb: build/main.o build/HTTP.o build/check.o build/spisok.o build/html.o build/noTLS.o build/openssl.o build/strcp.o
+	g++ -pthread build/main.o build/HTTP.o build/check.o build/strcp.o build/spisok.o build/html.o build/noTLS.o build/openssl.o -o build/bin/fastWeb -lssl -lcrypto
 
 build/main.o: main.cpp
 	g++ -c main.cpp -o build/main.o
 
 build/HTTP.o: HTTP/HTTP.cpp
 	g++ -c HTTP/HTTP.cpp -o build/HTTP.o
+
+build/check.o: HTTP/check.cpp
+	g++ -c HTTP/check.cpp -o build/check.o
+
+build/strcp.o: HTTP/strcp.cpp
+	g++ -c HTTP/strcp.cpp -o build/strcp.o
 
 build/spisok.o: robots/spisok.cpp
 	g++ -c robots/spisok.cpp -o build/spisok.o

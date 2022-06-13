@@ -1,16 +1,21 @@
 #include <fstream>
 #include <cstdio>
-//this class regulates access to files using robots.txt
-#define sizes 1000
 
 using namespace std;
 
 class robots {
 public:
-	char spisok[sizes][128]; //the list size is a maximum of 1000 words, 128 characters each
+	char **spisok;
 	bool grap();
 	int coit;
+	~robots();
 };
+
+robots::~robots(){
+	for(int i=0;i<coit;i++)
+		delete[] spisok[i];
+	delete[] spisok;
+}
 
 bool robots::grap(){
 	ifstream filespi;
@@ -22,16 +27,38 @@ bool robots::grap(){
 	}
 	
 	int p = 0;
+	int pm = 0;
 	int sch = 0;
-	while(!filespi.eof() && (sch!=sizes)){
-		filespi.get(spisok[sch][p]);
-		if(spisok[sch][p]=='\n'){
-			spisok[sch][p] = '\0';
-			p = -1;
+	for(int i = 0; !filespi.eof(); i++){
+		char r;
+		filespi.get(r);
+		if(r!='\n'){
+			p++;
+		}else{
 			sch++;
+			if(pm < p)
+				pm = p;
+			p = 0;
 		}
-		p++;
 	}
 	coit = sch;
+	spisok = new char*[sch];
+	for (int i=0; i<sch; i++)
+		spisok[i] = new char[pm];
+	filespi.clear();
+	filespi.seekg(0);
+	p = 0;
+	sch = 0;
+        for(int i = 0; !filespi.eof(); i++){
+                char r;
+                filespi.get(r);
+                if(r!='\n'){
+			spisok[sch][p] = r;
+                        p++;
+                }else{
+                        sch++;
+                        p = 0;
+                }
+        }
 	return 0;
 }

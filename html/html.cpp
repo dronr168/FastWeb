@@ -2,8 +2,6 @@
 #include <cstdio>
 #include <iostream>
 
-#define size 104857600 //maximum transfer file size 100 MB
-
 using namespace std;
 
 int BodyHtml(char *name, char *bufer, char *type){
@@ -18,13 +16,18 @@ if(!htmlFile){
 	htmlFile.close();
 	return 0;
 }
-char *buf = new char[size];
-int p = 0;
-for(p = 0;!htmlFile.eof(); p++) htmlFile.get(buf[p]);
-buf[p] = 0;
+char *buf;
+int size;
+for(size = 0;!htmlFile.eof(); size++) 
+	htmlFile.get();
+buf = new char[size];
+htmlFile.clear();
+htmlFile.seekg(0);
+for(int i=0; i<size; i++)
+	htmlFile.get(buf[i]);
 htmlFile.close();
 char Siz[6];
-sprintf(Siz, "%d", (p-1));
+sprintf(Siz, "%d", size);
 int cg = 0;
 int cp = 0;
 while(h1[cp]){
@@ -72,7 +75,7 @@ bufer[cg] = '\r';
 cg++;
 bufer[cg] = '\n';
 cg++;
-for(int i=0; i<p; i++){
+for(int i=0; i<size; i++){
         bufer[cg] = buf[i];
         cg++;
 }
