@@ -29,3 +29,9 @@ build/openssl.o: openssl/openssl.cpp
 
 clean:
 	rm build/*.o build/bin/fastWeb
+
+install:
+	cp build/bin/fastWeb /usr/bin/fastWeb
+
+delete:
+	rm /usr/bin/fastWeb
