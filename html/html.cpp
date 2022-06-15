@@ -18,7 +18,7 @@ if(!htmlFile){
 }
 char *buf;
 int size;
-for(size = 0;!htmlFile.eof(); size++) 
+for(size = 0;!htmlFile.eof(); size++)
 	htmlFile.get();
 buf = new char[size];
 htmlFile.clear();
@@ -26,46 +26,39 @@ htmlFile.seekg(0);
 for(int i=0; i<size; i++)
 	htmlFile.get(buf[i]);
 htmlFile.close();
+size--;
+buf[size] = '\0';
 char Siz[6];
 sprintf(Siz, "%d", size);
 int cg = 0;
-int cp = 0;
-while(h1[cp]){
+int cp;
+for(cp=0;h1[cp];cp++){
 	bufer[cg] = h1[cp];
 	cg++;
-	cp++;
 }
 bufer[cg] = '\r';
 cg++;
 bufer[cg] = '\n';
 cg++;
-cp = 0;
-while(h2[cp]){
+for(cp=0;h2[cp];cp++){
         bufer[cg] = h2[cp];
         cg++;
-        cp++;
 }
-cp = 0;
-while(type[cp]){
+for(cp=0;type[cp];cp++){
         bufer[cg] = type[cp];
         cg++;
-        cp++;
 }
 bufer[cg] = '\r';
 cg++;
 bufer[cg] = '\n';
 cg++;
-cp = 0;
-while(h3[cp]){
+for(cp=0;h3[cp];cp++){
         bufer[cg] = h3[cp];
         cg++;
-        cp++;
 }
-cp = 0;
-while(Siz[cp]){
+for(cp=0;Siz[cp];cp++){
         bufer[cg] = Siz[cp];
         cg++;
-        cp++;
 }
 bufer[cg] = '\r';
 cg++;

@@ -65,36 +65,32 @@ int NetHTTP::ClientSend(){
         }
 	int i = 0;
 	int p = 0;
-	while(i_buf[i] != ' '){
+	for( p=0; i_buf[i] != ' '; p++){
 		type[p] = i_buf[i];
 		i++;
-		p++;
 	}
 	type[p] = '\0';
 	i++;
-	p = 0;
-	while(i_buf[i] != ' '){
+	for( p=0; i_buf[i] != ' '; p++){
 		path[p] = i_buf[i];
 		i++;
-		p++;
 	}
 	path[p] = '\0';
 	i++;
-	int sizeB=0;
+	int sizeB;
 	if(type[0]=='P' && type[1]=='O' && type[2]=='S' && type[3]=='T'){
 		bool check = 0;
 		while(!check){
-			while(i_buf[i]!='\n') i++;
+			for( i; i_buf[i]!='\n'; i++);
 			i+=2;
 			if(i_buf[i]=='\n'){
 				check = 1;
 				i+=2;
 			}
 		}
-		while(i_buf[i]){
+		for( sizeB=0; i_buf[i]; sizeB++){
 			body[sizeB] = i_buf[i];//чтение post запроса, если он есть
 			i++;
-			p++;
 		}
 		body[sizeB] = '\0';
 	}
@@ -148,9 +144,8 @@ int NetHTTP::ClientSend(){
 			o_buf = new char[p];
 			size = p;
 			p = 0;
-			while(err[p]){
+			for(p=0;err[p];p++){
 				o_buf[p] = err[p];
-				p++;
 			}
 			o_buf[p] = '\0';
 			p++;
@@ -159,6 +154,7 @@ int NetHTTP::ClientSend(){
 		size = checksize((path+1));
 		if(size!=0){
 			o_buf = new char[size+100];
+			for(int g=0;g<(size+100);g++) o_buf[g] = '\0';
                 	p = BodyHtml((path+1), o_buf, "image/x-icon");
 			size+=100;
 		}else{
@@ -169,10 +165,8 @@ int NetHTTP::ClientSend(){
                         for(p = 0; err[p]; p++);
                         o_buf = new char[p];
 			size = p;
-                        p = 0;
-                        while(err[p]){
+                        for(p=0;err[p];p++){
                                 o_buf[p] = err[p];
-                                p++;
                         }
                         o_buf[p] = '\0';
                         p++;
@@ -191,10 +185,8 @@ int NetHTTP::ClientSend(){
                         for(p = 0; err[p]; p++);
                         o_buf = new char[p];
 			size = p;
-                        p = 0;
-			while(err[p]){
+			for(p=0;err[p];p++){
                                 o_buf[p] = err[p];
-                                p++;
                         }
                         o_buf[p] = '\0';
 			p++;
@@ -205,10 +197,8 @@ int NetHTTP::ClientSend(){
                 for(p = 0; err[p]; p++); 
                 o_buf = new char[p];
 		size = p;
-                p = 0;
-                while(err[p]){
+                for(p=0;err[p];p++){
 			o_buf[p] = err[p];
-			p++;
                 }
                 o_buf[p] = '\0';
                 p++;
